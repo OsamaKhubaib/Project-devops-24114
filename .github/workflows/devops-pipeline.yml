@@ -1,0 +1,44 @@
+name: DevOps CI-CD Pipeline
+
+# Pipeline tab chalay gi jab aap 'main' branch par push karenge
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # 1. Validation Job: Check if files exist
+  validate-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Folder Structure
+        run: |
+          echo "Checking if 'Project devops/docs' exists..."
+          if [ -d "Project devops/docs" ]; then
+            echo "Docs folder found."
+          else
+            echo "Docs folder MISSING!"
+            exit 1
+          fi
+
+      - name: Validate Markdown Files
+        run: |
+          echo "Checking README.md..."
+          if [ -f "README.md" ]; then
+            echo "Root README found."
+          fi
+
+  # 2. Build/Deploy Job (Simulation)
+  deploy-docs:
+    needs: validate-structure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploying Project Info
+        run: |
+          echo "Deploying DevOps Project to Environment..."
+          echo "Target Path: d:/devops/Project devops-24114"
+          echo "Status: Success"
